@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:resportcode/screens/sign_in_screen.dart';
 import '../services/auth_service.dart'; // Update with the correct path
 
 class SignUpScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class SignUpScreenState extends State<SignUpScreen> {
 
   final AuthService authService = AuthService();
 
-  void _checkFinish() async {
+  void checkFinish() async {
     if (passwordController.text.isEmpty) {
       // Show Snackbar if password is empty
       ScaffoldMessenger.of(context).showSnackBar(
@@ -45,6 +46,9 @@ class SignUpScreenState extends State<SignUpScreen> {
           passwordController.clear();
           isEmailEntered = false;
         });
+
+        // Navigate to HomeScreen
+        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -150,7 +154,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                     });
                   } else {
                     // Check password before proceeding
-                    _checkFinish();
+                    checkFinish();
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -197,7 +201,10 @@ class SignUpScreenState extends State<SignUpScreen> {
                 width: 200,
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: Handle Sign In with Email action
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SignInScreen())
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1F402D), // Olive green
