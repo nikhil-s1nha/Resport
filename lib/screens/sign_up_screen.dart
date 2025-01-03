@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -14,23 +15,46 @@ class SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  void _checkFinish() {
+  final DatabaseReference database = FirebaseDatabase.instance.ref("users");
+
+  void _checkFinish() async {
     if (passwordController.text.isEmpty) {
-      // Show Snackbar if password is empty
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Please enter a password"),
-          duration: const Duration(seconds: 2)
+          duration: Duration(seconds: 2),
         ),
       );
     } else {
-      // TODO: Handle final sign-up action
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Sign-up complete!"),
-          duration: const Duration(seconds: 2)
-        ),
-      );
+      try {
+        final String email = emailController.text.trim();
+        final String password = passwordController.text;
+
+        await database.push().set({
+          'email': email,
+          'password': password,
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Sign-up complete!"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+
+        setState(() {
+          emailController.clear();
+          passwordController.clear();
+          isEmailEntered = false;
+        });
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error: ${e.toString()}"),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
     }
   }
 
@@ -118,7 +142,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text("Please enter an email"),
-                          duration: const Duration(seconds: 2)
+                          duration: Duration(seconds: 2),
                         ),
                       );
                       return;
@@ -139,8 +163,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 child: Text(
-                  !isEmailEntered ? "Sign Up": "Finish",
-                  style: TextStyle(
+                  !isEmailEntered ? "Sign Up" : "Finish",
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -155,7 +179,8 @@ class SignUpScreenState extends State<SignUpScreen> {
               // OR Divider
               Row(
                 children: [
-                  const Expanded(child: Divider(thickness: 1, indent: 32, endIndent: 8)),
+                  const Expanded(
+                      child: Divider(thickness: 1, indent: 32, endIndent: 8)),
                   Text(
                     "OR",
                     style: TextStyle(
@@ -163,7 +188,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Expanded(child: Divider(thickness: 1, indent: 8, endIndent: 32)),
+                  const Expanded(
+                      child: Divider(thickness: 1, indent: 8, endIndent: 32)),
                 ],
               ),
               const SizedBox(height: 24),

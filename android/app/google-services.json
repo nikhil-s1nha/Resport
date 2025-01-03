@@ -12,7 +12,12 @@
           "package_name": "com.nikhilsinha.resportcode"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "745804421317-rs0eenh06mlehhhe42hh3tmm8taoe0at.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDAwqi2HdmzPWqjQrGNq4tCXAZwjzLX71s"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "745804421317-rs0eenh06mlehhhe42hh3tmm8taoe0at.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "745804421317-fvq2ph7phneg2nomlt2ee7sihm80e2mc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nikhilsinha.resportcode"
+              }
+            }
+          ]
         }
       }
     }
