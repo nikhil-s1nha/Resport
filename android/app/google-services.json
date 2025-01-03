@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "745804421317",
+    "project_id": "resport-app-db",
+    "storage_bucket": "resport-app-db.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:745804421317:android:181c7a71200a14d45938ac",
+        "android_client_info": {
+          "package_name": "com.nikhilsinha.resportcode"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAwqi2HdmzPWqjQrGNq4tCXAZwjzLX71s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
