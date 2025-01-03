@@ -20,7 +20,6 @@ class SignUpScreenState extends State<SignUpScreen> {
 
   void checkFinish() async {
     if (passwordController.text.isEmpty) {
-      // Show Snackbar if password is empty
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Please enter a password"),
@@ -57,6 +56,29 @@ class SignUpScreenState extends State<SignUpScreen> {
           ),
         );
       }
+    }
+  }
+
+  void handleGoogleSignIn() async {
+    try {
+      await authService.signInWithGoogle();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Google sign-in successful!"),
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      // Navigate to HomeScreen
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error: ${e.toString()}"),
+          duration: const Duration(seconds: 2),
+        ),
+      );
     }
   }
 
@@ -203,7 +225,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SignInScreen())
+                      MaterialPageRoute(
+                          builder: (context) => const SignInScreen()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -229,9 +252,7 @@ class SignUpScreenState extends State<SignUpScreen> {
               SizedBox(
                 width: 200,
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    // TODO: Add Google sign-up logic
-                  },
+                  onPressed: handleGoogleSignIn,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFDB4437), // Google red
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -242,33 +263,6 @@ class SignUpScreenState extends State<SignUpScreen> {
                   icon: const Icon(Icons.g_mobiledata, color: Colors.white),
                   label: const Text(
                     "Continue with Google",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Sign Up with Apple Button
-              SizedBox(
-                width: 200,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    // TODO: Add Apple sign-up logic
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black, // Apple black
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  icon: const Icon(Icons.apple, color: Colors.white),
-                  label: const Text(
-                    "Continue with Apple",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
