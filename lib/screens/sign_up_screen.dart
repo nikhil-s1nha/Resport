@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
+import '../services/auth_service.dart'; // Update with the correct path
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -15,10 +15,11 @@ class SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  final DatabaseReference database = FirebaseDatabase.instance.ref("users");
+  final AuthService authService = AuthService();
 
   void _checkFinish() async {
     if (passwordController.text.isEmpty) {
+      // Show Snackbar if password is empty
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Please enter a password"),
@@ -30,10 +31,7 @@ class SignUpScreenState extends State<SignUpScreen> {
         final String email = emailController.text.trim();
         final String password = passwordController.text;
 
-        await database.push().set({
-          'email': email,
-          'password': password,
-        });
+        await authService.createUser(email, password);
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
