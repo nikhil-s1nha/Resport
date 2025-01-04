@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:resportcode/screens/sign_in_screen.dart';
 import '../services/auth_service.dart'; // Update with the correct path
@@ -15,6 +17,7 @@ class SignUpScreenState extends State<SignUpScreen> {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
 
   final AuthService authService = AuthService();
 
@@ -30,8 +33,18 @@ class SignUpScreenState extends State<SignUpScreen> {
       try {
         final String email = emailController.text.trim();
         final String password = passwordController.text;
+        final String name = nameController.text.trim();
 
-        await authService.createUser(email, password);
+        // Call Firebase Auth to create a user
+        final credential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+
+        // Save user info to Realtime Database
+        final String uid = credential.user!.uid;
+        await FirebaseDatabase.instance.ref('users/$uid').set({
+          'fullName': name,
+          'email': email,
+        });
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -43,11 +56,35 @@ class SignUpScreenState extends State<SignUpScreen> {
         setState(() {
           emailController.clear();
           passwordController.clear();
+          nameController.clear();
           isEmailEntered = false;
         });
 
         // Navigate to HomeScreen
         Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'email-already-in-use') {
+          // Handle email already in use
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                "The email address is already in use. Please sign in instead.",
+              ),
+              duration: const Duration(seconds: 3),
+            ),
+          );
+
+          // Navigate to Sign-In screen
+          Navigator.pushNamed(context, '/sign-up'); // Update with your Sign-In route
+        } else {
+          // Handle other Firebase Auth errors
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Error: ${e.message}"),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -96,138 +133,106 @@ class SignUpScreenState extends State<SignUpScreen> {
         backgroundColor: const Color(0xFF1F402D), // Olive green color
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Create an Account",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF1F402D),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Create an Account",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1F402D),
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            // Email Input
-            SizedBox(
-              width: 300,
-              child: TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  labelText: "Email",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+              // Name Input
+              if (isEmailEntered) ...[
+                SizedBox(
+                  width: 300,
+                  child: TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      labelText: "Full Name",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
+                const SizedBox(height: 16),
+              ],
 
-            // Conditionally show Password Input
-            if (isEmailEntered) ...[
-              const SizedBox(height: 16),
+              // Email Input
               SizedBox(
                 width: 300,
                 child: TextField(
-                  controller: passwordController,
-                  obscureText: !showPassword,
+                  controller: emailController,
                   decoration: InputDecoration(
-                    labelText: "Password",
+                    labelText: "Email",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        showPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                  ),
+                ),
+              ),
+
+              // Conditionally show Password Input
+              if (isEmailEntered) ...[
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: 300,
+                  child: TextField(
+                    controller: passwordController,
+                    obscureText: !showPassword,
+                    decoration: InputDecoration(
+                      labelText: "Password",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          showPassword = !showPassword;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ],
-            const SizedBox(height: 16),
-
-            // Sign/Finish Button
-            SizedBox(
-              width: 150,
-              child: ElevatedButton(
-                onPressed: () {
-                  if (!isEmailEntered) {
-                    // Check if the email is entered
-                    if (emailController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Please enter an email"),
-                          duration: Duration(seconds: 2),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          showPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                         ),
-                      );
-                      return;
-                    }
-                    setState(() {
-                      isEmailEntered = true;
-                    });
-                  } else {
-                    // Check password before proceeding
-                    checkFinish();
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1F402D), // Olive green
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Text(
-                  !isEmailEntered ? "Sign Up" : "Finish",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-
-            // Conditionally hide everything below after "Sign"
-            if (!isEmailEntered) ...[
-              const SizedBox(height: 24),
-              // OR Divider
-              Row(
-                children: [
-                  const Expanded(
-                      child: Divider(thickness: 1, indent: 32, endIndent: 8)),
-                  Text(
-                    "OR",
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontWeight: FontWeight.bold,
+                        onPressed: () {
+                          setState(() {
+                            showPassword = !showPassword;
+                          });
+                        },
+                      ),
                     ),
                   ),
-                  const Expanded(
-                      child: Divider(thickness: 1, indent: 8, endIndent: 32)),
-                ],
-              ),
-              const SizedBox(height: 24),
+                ),
+              ],
+              const SizedBox(height: 16),
 
-              // Sign In with Email
+              // Sign/Finish Button
               SizedBox(
-                width: 200,
+                width: 150,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SignInScreen()),
-                    );
+                    if (!isEmailEntered) {
+                      // Check if the email is entered
+                      if (emailController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Please enter an email"),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                        return;
+                      }
+                      setState(() {
+                        isEmailEntered = true;
+                      });
+                    } else {
+                      // Check password and name before proceeding
+                      checkFinish();
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1F402D), // Olive green
@@ -236,9 +241,9 @@ class SignUpScreenState extends State<SignUpScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text(
-                    "Sign In with Email",
-                    style: TextStyle(
+                  child: Text(
+                    !isEmailEntered ? "Sign Up" : "Finish",
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -246,33 +251,83 @@ class SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
 
-              // Sign Up with Google Button
-              SizedBox(
-                width: 200,
-                child: ElevatedButton.icon(
-                  onPressed: handleGoogleSignIn,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFDB4437), // Google red
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+              // Conditionally hide everything below after "Sign"
+              if (!isEmailEntered) ...[
+                const SizedBox(height: 24),
+                Row(
+                  children: [
+                    const Expanded(
+                        child: Divider(thickness: 1, indent: 32, endIndent: 8)),
+                    Text(
+                      "OR",
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  icon: const Icon(Icons.g_mobiledata, color: Colors.white),
-                  label: const Text(
-                    "Continue with Google",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                    const Expanded(
+                        child: Divider(thickness: 1, indent: 8, endIndent: 32)),
+                  ],
+                ),
+                const SizedBox(height: 24),
+
+                // Sign In with Email
+                SizedBox(
+                  width: 200,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignInScreen()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1F402D), // Olive green
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      "Sign In with Email",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
+                const SizedBox(height: 16),
+
+                // Sign Up with Google Button
+                SizedBox(
+                  width: 200,
+                  child: ElevatedButton.icon(
+                    onPressed: handleGoogleSignIn,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFDB4437), // Google red
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    icon: const Icon(Icons.g_mobiledata, color: Colors.white),
+                    label: const Text(
+                      "Continue with Google",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

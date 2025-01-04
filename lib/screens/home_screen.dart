@@ -1,77 +1,184 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String? name;
+  bool isAuthenticated = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkAuthStatus();
+  }
+
+  Future<void> checkAuthStatus() async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // Fetch user profile
+      final DatabaseReference database = FirebaseDatabase.instance.ref();
+      final snapshot = await database.child('users/${user.uid}').get();
+
+      if (snapshot.exists) {
+        final data = Map<String, dynamic>.from(snapshot.value as Map);
+        setState(() {
+          name = data['name'] ?? 'User';
+          isAuthenticated = true;
+        });
+      }
+    }
+  }
+
+  void logout() async {
+    await FirebaseAuth.instance.signOut();
+    setState(() {
+      isAuthenticated = false;
+      name = null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-            "Resport",
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold
-            )
-        ),
-        backgroundColor: const Color(0xFF1F402D), // Olive green color //const to reduce loop time
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 100,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/give');
-                },
-                child: const Text('GIVE'),
-              )
-            ),
-            const SizedBox(height: 25),
-            SizedBox(
-              width: 100,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/get');
-                },
-                child: const Text('GET'),
-              )
-            ),
-            const SizedBox(height: 25),
-            SizedBox(
-              width: 120,
-              height: 50,
-              child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/sign-up');
-                  },
-                  child: const Text('SIGN UP')),
-            ),
-            const SizedBox(height: 40),
-            Container(
-              width: 350,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                  color: const Color(0xFF2a573d),
-                  borderRadius: BorderRadius.circular(4)
+        title: const Text("Home"),
+        backgroundColor: const Color(0xFF1F402D), // Olive green color
+        actions: isAuthenticated
+            ? [
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.account_circle, color: Colors.white),
+            onSelected: (value) {
+              if (value == "Profile") {
+                Navigator.pushNamed(context, '/profile'); // Navigate to profile screen
+              } else if (value == "Logout") {
+                logout();
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: "Profile",
+                child: Text("Profile"),
               ),
-              child: const Text(
-                'ALL FUNDS DIRECTED TO SMZO',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                )
-              )
-            )
-          ],
-        )
-    ),
+              const PopupMenuItem(
+                value: "Logout",
+                child: Text("Logout"),
+              ),
+            ],
+          ),
+        ]
+            : null,
+      ),
+      body: Column(
+        children: [
+          // Top banner
+          Container(
+            width: double.infinity,
+            color: const Color(0xFFE6E6E6), // Light gray banner background
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Text(
+              isAuthenticated
+                  ? "Welcome to Resport, ${name ?? 'User'}!"
+                  : "Welcome to Resport!",
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/give');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2a573d), // Olive green
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 25),
+                    ),
+                    child: const Text(
+                      "Give",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/get');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2a573d), // Olive green
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 25),
+                    ),
+                    child: const Text(
+                      "Get",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  if (!isAuthenticated) ...[
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/sign-up');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF2a573d), // Olive green
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 25),
+                      ),
+                      child: const Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 24),
+                  Container(
+                      width: 350,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                          color: const Color(0xFF2a573d),
+                          borderRadius: BorderRadius.circular(4)
+                      ),
+                      child: const Text(
+                          'ALL FUNDS DIRECTED TO SMZO',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          )
+                      )
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

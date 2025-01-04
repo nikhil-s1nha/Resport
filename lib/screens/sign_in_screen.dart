@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -20,6 +21,7 @@ class SignInScreenState extends State<SignInScreen> {
     final String email = emailController.text.trim();
     final String password = passwordController.text;
 
+    // Validate email and password
     if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -41,54 +43,31 @@ class SignInScreenState extends State<SignInScreen> {
     }
 
     try {
-      final DataSnapshot snapshot = await database.get();
-      final Map<dynamic, dynamic>? users = snapshot.value as Map?;
+      // Authenticate the user with Firebase
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-      if (users == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Email not found"),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        return;
-      }
+      final User? user = userCredential.user;
 
-      bool emailFound = false;
-      for (var entry in users.entries) {
-        final user = entry.value;
-        if (user['email'] == email) {
-          emailFound = true;
-          if (user['password'] == password) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Sign-in successful!"),
-                duration: Duration(seconds: 2),
-              ),
-            );
+      if (user != null) {
+        String uid = user.uid;
 
-            // Navigate to HomeScreen
-            Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-            return;
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Incorrect password"),
-                duration: Duration(seconds: 2),
-              ),
-            );
-            return;
-          }
+        // Retrieve user data from the database
+        final DataSnapshot snapshot = await FirebaseDatabase.instance.ref("users").child(uid).get();
+
+        if (snapshot.exists) {
+          final Map<String, dynamic> userData = Map<String, dynamic>.from(snapshot.value as Map);
+
+          // Optional: You can display user's name, email, etc., on the home screen
+          print("Sign-in successful! Welcome, ${userData['fullName']}");
+
+          // Navigate to the Home Screen
+          Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+        } else {
+          throw Exception("User data not found in the database.");
         }
-      }
-
-      if (!emailFound) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Email not found"),
-            duration: Duration(seconds: 2),
-          ),
-        );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

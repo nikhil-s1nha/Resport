@@ -8,12 +8,29 @@ class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   /// Create a user in the database
-  Future<void> createUser(String email, String password) async {
+  Future<void> createUser(String email, String password, String fullName) async {
     try {
-      await _database.push().set({
-        'email': email,
-        'password': password, // WARNING: Avoid storing plain text passwords in production.
-      });
+      // Authenticate the user
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        String uid = user.uid; // Get authenticated user's UID
+
+        // Save user data under their UID in the database
+        await _database.child("users").child(uid).set({
+          'email': email,
+          'fullName': fullName, // Store full name
+          'password': password, // WARNING: Avoid storing plain text passwords in production!
+        });
+
+        // Optionally, delete temporary sign-up data if stored
+        await _database.child("signUp").child(uid).remove();
+      }
     } catch (e) {
       throw Exception("Error creating user: ${e.toString()}");
     }
@@ -22,26 +39,21 @@ class AuthService {
   /// Sign in with Google and save the user in the database
   Future<void> signInWithGoogle() async {
     try {
-      // Attempt Google Sign-In
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
-        // User canceled the Google Sign-In
         print("Google Sign-In canceled by user.");
         return;
       }
 
-      // Retrieve Google authentication details
       final GoogleSignInAuthentication googleAuth =
       await googleUser.authentication;
 
-      // Create a credential using Google authentication tokens
       final OAuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      // Sign in with Firebase using the credential
       final UserCredential userCredential =
       await _firebaseAuth.signInWithCredential(credential);
 
@@ -50,11 +62,16 @@ class AuthService {
       if (user != null) {
         final String email = user.email ?? "No email";
         final String userId = user.uid;
+        final String displayName = user.displayName ?? "No name";
+        final String profilePicture =
+            user.photoURL ?? "https://example.com/default-profile.png";
 
         // Save user info to Firebase Realtime Database
         await _database.child(userId).set({
           'email': email,
-          'password': "GoogleSignIn", // Placeholder password
+          'name': displayName,
+          'profilePicture': profilePicture,
+          'signInMethod': "GoogleSignIn",
         });
 
         print("Google Sign-In successful. User ID: $userId");
@@ -62,9 +79,22 @@ class AuthService {
         print("Google Sign-In failed. No user returned.");
       }
     } catch (e) {
-      // Handle exceptions
       print("Error during Google Sign-In: ${e.toString()}");
+    }
+  }
 
+  /// Retrieve user profile from the database
+  Future<Map<String, dynamic>?> getUserProfile(String uid) async {
+    try {
+      final DataSnapshot snapshot = await _database.child(uid).get();
+      if (snapshot.exists) {
+        return Map<String, dynamic>.from(snapshot.value as Map);
+      } else {
+        print("User profile not found.");
+        return null;
+      }
+    } catch (e) {
+      throw Exception("Error retrieving user profile: ${e.toString()}");
     }
   }
 }
