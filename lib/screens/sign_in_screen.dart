@@ -87,7 +87,6 @@ class SignInScreenState extends State<SignInScreen> {
           "SIGN IN",
           style: TextStyle(
             color: Colors.white,
-            fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: const Color(0xFF1F402D), // Olive green color

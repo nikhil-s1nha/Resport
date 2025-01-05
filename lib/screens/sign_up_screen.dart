@@ -127,7 +127,6 @@ class SignUpScreenState extends State<SignUpScreen> {
           "SIGN UP",
           style: TextStyle(
             color: Colors.white,
-            fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: const Color(0xFF1F402D), // Olive green color

@@ -54,7 +54,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home"),
+        title: const Text(
+            "Home",
+            style: TextStyle(
+              color: Colors.white,
+            )),
         backgroundColor: const Color(0xFF1F402D), // Olive green color
         actions: isAuthenticated
             ? [

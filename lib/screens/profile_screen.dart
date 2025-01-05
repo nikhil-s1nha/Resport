@@ -7,7 +7,11 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Profile"),
+        title: const const Text(
+          "Home",
+          style: TextStyle(
+            color: Colors.white,
+          )),
         backgroundColor: const Color(0xFF1F402D),
       ),
       body: Center(
