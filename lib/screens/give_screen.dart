@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import '../services/image_service.dart';
 import 'package:image_picker/image_picker.dart';
-
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'sign_up_screen.dart'; // Import the SignUpScreen
 
 class GiveScreen extends StatefulWidget {
   const GiveScreen({super.key});
@@ -26,12 +26,42 @@ class GiveScreenState extends State<GiveScreen> {
 
   File? image;
   final ImageService imageService = ImageService();
-  Future<void> pickImage(ImageSource source) async{
+
+  Future<void> pickImage(ImageSource source) async {
     final File? _image = await imageService.pickImage(source);
     if (_image != null) {
       setState(() {
         image = _image;
       });
+    }
+  }
+
+  Future<void> handleUpload() async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // User is signed in, proceed with image upload
+      try {
+        File? _image = await imageService.pickImage(ImageSource.gallery);
+        if (_image != null) {
+          setState(() {
+            image = _image;
+          });
+          print("Image picked successfully: ${_image.path}");
+        } else {
+          print("No image selected");
+        }
+      } catch (e) {
+        print("Error during image selection: $e");
+      }
+    } else {
+      // User is not signed in, redirect to the Sign-Up screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SignUpScreen(fromGiveScreen: true),
+        ),
+      );
     }
   }
 
@@ -43,7 +73,7 @@ class GiveScreenState extends State<GiveScreen> {
           "GIVE",
           style: TextStyle(
             color: Colors.white,
-          )
+          ),
         ),
         backgroundColor: const Color(0xFF1F402D), // Olive green color
       ),
@@ -87,65 +117,47 @@ class GiveScreenState extends State<GiveScreen> {
               }).toList(),
             ),
             if (selectedSport != null)
-              Column(
-                children: [
-                  const SizedBox(height: 24), // Add spacing
-                  SizedBox(
-                      width: 160,
-                      height: 60,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          try {
-                            File? _image = await imageService.pickImage(ImageSource.gallery);
-                            if (_image != null) {
-                              setState(() {
-                                image = _image;
-                              });
-                              print("Image picked successfully: ${_image.path}");
-                            } else {
-                              print("No image selected");
-                            }
-                          } catch (e) {
-                            print("Error during image selection: $e");
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1F402D),
-                          // Olive green color
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          "Upload Photo",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )
+              Column(children: [
+                const SizedBox(height: 24), // Add spacing
+                SizedBox(
+                  width: 160,
+                  height: 60,
+                  child: ElevatedButton(
+                    onPressed: handleUpload, // Use the new handleUpload function
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1F402D),
+                      // Olive green color
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      "Upload Photo",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ]
-              ),
+                ),
+              ]),
             if (image != null)
-              Column(
-                children: [
-                  const SizedBox(height: 16),
-                  const Text(
-                    "Selected Image:",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Image.file(
-                    image!,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  )
-                ]
-              )
+              Column(children: [
+                const SizedBox(height: 16),
+                const Text(
+                  "Selected Image:",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Image.file(
+                  image!,
+                  height: 200,
+                  fit: BoxFit.cover,
+                )
+              ])
           ],
         ),
       ),

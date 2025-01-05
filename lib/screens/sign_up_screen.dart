@@ -5,7 +5,9 @@ import 'package:resportcode/screens/sign_in_screen.dart';
 import '../services/auth_service.dart'; // Update with the correct path
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  final bool fromGiveScreen; // Flag to check if redirected from GiveScreen
+
+  const SignUpScreen({super.key, this.fromGiveScreen = false}); // Default to false
 
   @override
   State<SignUpScreen> createState() => SignUpScreenState();
@@ -20,6 +22,25 @@ class SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController nameController = TextEditingController();
 
   final AuthService authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Ensure Snackbar is shown after screen build
+    if (widget.fromGiveScreen) {
+      Future.delayed(Duration.zero, () {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("You must sign in to use this feature"),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      });
+    }
+  }
 
   void checkFinish() async {
     if (passwordController.text.isEmpty) {
@@ -75,7 +96,7 @@ class SignUpScreenState extends State<SignUpScreen> {
           );
 
           // Navigate to Sign-In screen
-          Navigator.pushNamed(context, '/sign-up'); // Update with your Sign-In route
+          Navigator.pushNamed(context, '/sign-in'); // Update with your Sign-In route
         } else {
           // Handle other Firebase Auth errors
           ScaffoldMessenger.of(context).showSnackBar(
@@ -303,7 +324,7 @@ class SignUpScreenState extends State<SignUpScreen> {
 
                 // Sign Up with Google Button
                 SizedBox(
-                  width: 200,
+                  width: 250,
                   child: ElevatedButton.icon(
                     onPressed: handleGoogleSignIn,
                     style: ElevatedButton.styleFrom(
