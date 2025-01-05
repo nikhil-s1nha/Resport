@@ -23,14 +23,19 @@ class _HomeScreenState extends State<HomeScreen> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      // Fetch user profile
+      // Fetch user profile using Firebase UID
       final DatabaseReference database = FirebaseDatabase.instance.ref();
       final snapshot = await database.child('users/${user.uid}').get();
 
       if (snapshot.exists) {
         final data = Map<String, dynamic>.from(snapshot.value as Map);
         setState(() {
-          name = data['name'] ?? 'User';
+          name = data['fullName'] ?? 'User'; // Use 'fullName' key from the database
+          isAuthenticated = true;
+        });
+      } else {
+        setState(() {
+          name = 'User'; // Fallback if no data found
           isAuthenticated = true;
         });
       }
@@ -85,8 +90,8 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Text(
               isAuthenticated
-                  ? "Welcome to Resport, ${name ?? 'User'}!"
-                  : "Welcome to Resport!",
+                  ? "Welcome to Resport, ${name}!"
+                  : "Welcome to Resport!" ,
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
