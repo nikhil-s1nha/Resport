@@ -82,13 +82,13 @@ class GiveScreenState extends State<GiveScreen> {
     }
 
     try {
-      final DatabaseReference database = FirebaseDatabase.instance.ref("uploads");
+      final DatabaseReference database = FirebaseDatabase.instance.ref("users/${user.uid}/uploads");
       await database.push().set({
-        'userId': user.uid,
         'sport': selectedSport,
         'imagePath': image!.path,
         'title': titleController.text.trim(),
         'description': descriptionController.text.trim(),
+        'uploadedAt': DateTime.now().toIso8601String(),
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -221,7 +221,7 @@ class GiveScreenState extends State<GiveScreen> {
                   controller: descriptionController,
                   maxLines: 3, // Multi-line input
                   decoration: InputDecoration(
-                    labelText: "Description",
+                    labelText: "Description (Model, Wear, Age)",
                     border: OutlineInputBorder(),
                     alignLabelWithHint: true, // Aligns the label with the hint (top-left)
                   ),
@@ -247,8 +247,8 @@ class GiveScreenState extends State<GiveScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                  ),
                 ),
-                      ),
               ]),
           ],
         ),
