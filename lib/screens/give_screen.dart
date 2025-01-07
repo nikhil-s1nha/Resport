@@ -15,6 +15,7 @@ class GiveScreen extends StatefulWidget {
 
 class GiveScreenState extends State<GiveScreen> {
   String? selectedSport;
+  String? transportMethod;
   final List<String> sportsList = [
     "Soccer",
     "Basketball",
@@ -25,7 +26,14 @@ class GiveScreenState extends State<GiveScreen> {
     "Other",
   ];
 
+  final List<String> transportMethods = [
+    "Home Pickup",
+    "Third-Party Transfer",
+    "Self-Deliver",
+  ];
+
   File? image;
+  bool isPhotoUploaded = false;
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final ImageService imageService = ImageService();
@@ -40,6 +48,7 @@ class GiveScreenState extends State<GiveScreen> {
         if (_image != null) {
           setState(() {
             image = _image;
+            isPhotoUploaded = true; // Photo uploaded successfully
           });
           print("Image picked successfully: ${_image.path}");
         } else {
@@ -60,7 +69,10 @@ class GiveScreenState extends State<GiveScreen> {
   }
 
   Future<void> uploadDataToDatabase() async {
-    if (image == null || titleController.text.isEmpty || descriptionController.text.isEmpty) {
+    if (image == null ||
+        titleController.text.isEmpty ||
+        descriptionController.text.isEmpty ||
+        transportMethod == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Please complete all fields before uploading."),
@@ -88,6 +100,7 @@ class GiveScreenState extends State<GiveScreen> {
         'imagePath': image!.path,
         'title': titleController.text.trim(),
         'description': descriptionController.text.trim(),
+        'transportMethod': transportMethod,
         'uploadedAt': DateTime.now().toIso8601String(),
       });
 
@@ -103,6 +116,8 @@ class GiveScreenState extends State<GiveScreen> {
         titleController.clear();
         descriptionController.clear();
         selectedSport = null;
+        transportMethod = null;
+        isPhotoUploaded = false;
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -165,7 +180,7 @@ class GiveScreenState extends State<GiveScreen> {
                 );
               }).toList(),
             ),
-            if (selectedSport != null)
+            if (selectedSport != null && !isPhotoUploaded)
               Column(children: [
                 const SizedBox(height: 24), // Add spacing
                 SizedBox(
@@ -225,6 +240,38 @@ class GiveScreenState extends State<GiveScreen> {
                     border: OutlineInputBorder(),
                     alignLabelWithHint: true, // Aligns the label with the hint (top-left)
                   ),
+                ),
+                const SizedBox(height: 16),
+                // Transport Method
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Select a transport method:",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      value: transportMethod,
+                      hint: const Text("Transport Method"),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          transportMethod = newValue;
+                        });
+                      },
+                      items: transportMethods.map((method) {
+                        return DropdownMenuItem<String>(
+                          value: method,
+                          child: Text(method),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
                 // Final Upload Button
