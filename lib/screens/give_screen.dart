@@ -3,7 +3,8 @@ import 'dart:io';
 import '../services/image_service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'sign_up_screen.dart'; // Import the SignUpScreen
+import 'package:firebase_database/firebase_database.dart';
+import 'sign_up_screen.dart';
 
 class GiveScreen extends StatefulWidget {
   const GiveScreen({super.key});
@@ -25,16 +26,9 @@ class GiveScreenState extends State<GiveScreen> {
   ];
 
   File? image;
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
   final ImageService imageService = ImageService();
-
-  Future<void> pickImage(ImageSource source) async {
-    final File? _image = await imageService.pickImage(source);
-    if (_image != null) {
-      setState(() {
-        image = _image;
-      });
-    }
-  }
 
   Future<void> handleUpload() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -60,6 +54,61 @@ class GiveScreenState extends State<GiveScreen> {
         context,
         MaterialPageRoute(
           builder: (context) => const SignUpScreen(fromGiveScreen: true),
+        ),
+      );
+    }
+  }
+
+  Future<void> uploadDataToDatabase() async {
+    if (image == null || titleController.text.isEmpty || descriptionController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please complete all fields before uploading."),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("You must be signed in to upload."),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    try {
+      final DatabaseReference database = FirebaseDatabase.instance.ref("uploads");
+      await database.push().set({
+        'userId': user.uid,
+        'sport': selectedSport,
+        'imagePath': image!.path,
+        'title': titleController.text.trim(),
+        'description': descriptionController.text.trim(),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Upload successful!"),
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      setState(() {
+        image = null;
+        titleController.clear();
+        descriptionController.clear();
+        selectedSport = null;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error uploading data: $e"),
+          duration: const Duration(seconds: 2),
         ),
       );
     }
@@ -156,8 +205,50 @@ class GiveScreenState extends State<GiveScreen> {
                   image!,
                   height: 200,
                   fit: BoxFit.cover,
-                )
-              ])
+                ),
+                const SizedBox(height: 16),
+                // Title Input
+                TextField(
+                  controller: titleController,
+                  decoration: const InputDecoration(
+                    labelText: "Title",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Description Input
+                TextField(
+                  controller: descriptionController,
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                    labelText: "Description",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Final Upload Button
+                SizedBox(
+                  width: 80,
+                  child: ElevatedButton(
+                    onPressed: uploadDataToDatabase,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF1F402D),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      "Upload",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                ),
+                      ),
+              ]),
           ],
         ),
       ),
