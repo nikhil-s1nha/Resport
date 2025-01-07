@@ -219,10 +219,11 @@ class GiveScreenState extends State<GiveScreen> {
                 // Description Input
                 TextField(
                   controller: descriptionController,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
+                  maxLines: 3, // Multi-line input
+                  decoration: InputDecoration(
                     labelText: "Description",
                     border: OutlineInputBorder(),
+                    alignLabelWithHint: true, // Aligns the label with the hint (top-left)
                   ),
                 ),
                 const SizedBox(height: 16),
