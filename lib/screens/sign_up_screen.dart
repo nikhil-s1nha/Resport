@@ -5,9 +5,9 @@ import 'package:resportcode/screens/sign_in_screen.dart';
 import '../services/auth_service.dart'; // Update with the correct path
 
 class SignUpScreen extends StatefulWidget {
-  final bool fromGiveScreen; // Flag to check if redirected from GiveScreen
+  final bool fromRedirect; // Flag to check if redirected from another screen
 
-  const SignUpScreen({super.key, this.fromGiveScreen = false}); // Default to false
+  const SignUpScreen({super.key, this.fromRedirect = false}); // Default to false
 
   @override
   State<SignUpScreen> createState() => SignUpScreenState();
@@ -27,13 +27,16 @@ class SignUpScreenState extends State<SignUpScreen> {
   void initState() {
     super.initState();
 
-    // Ensure Snackbar is shown after screen build
-    if (widget.fromGiveScreen) {
+    // Show a snackbar if redirected
+    if (widget.fromRedirect) {
       Future.delayed(Duration.zero, () {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text("You must sign in to use this feature"),
+              content: Text(
+                  "Please sign in to use this feature!",
+              textAlign: TextAlign.center,
+              ),
               duration: Duration(seconds: 3),
             ),
           );
@@ -97,7 +100,7 @@ class SignUpScreenState extends State<SignUpScreen> {
           );
 
           // Navigate to Sign-In screen
-          Navigator.pushNamed(context, '/sign-in'); // Update with your Sign-In route
+          Navigator.pushNamed(context, '/sign-in');
         } else {
           // Handle other Firebase Auth errors
           ScaffoldMessenger.of(context).showSnackBar(

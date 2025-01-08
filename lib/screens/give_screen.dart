@@ -38,8 +38,22 @@ class GiveScreenState extends State<GiveScreen> {
   final TextEditingController descriptionController = TextEditingController();
 
   Future<void> handleUpload() async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      // Redirect to sign-up screen if not signed in
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SignUpScreen(fromRedirect: true), // Pass the flag
+        ),
+      );
+      return;
+    }
+
     try {
-      final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final pickedImage =
+      await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedImage != null) {
         setState(() {
           image = File(pickedImage.path);
@@ -60,7 +74,8 @@ class GiveScreenState extends State<GiveScreen> {
   Future<String> uploadImageToStorage(File imageFile) async {
     try {
       final fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      final storageRef = FirebaseStorage.instance.ref().child('uploads/$fileName');
+      final storageRef =
+      FirebaseStorage.instance.ref().child('uploads/$fileName');
       final uploadTask = storageRef.putFile(imageFile);
       final snapshot = await uploadTask;
       final downloadUrl = await snapshot.ref.getDownloadURL();

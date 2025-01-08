@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-            "Home",
+            "HOME",
             style: TextStyle(
               color: Colors.white,
             )),
@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           vertical: 16, horizontal: 25),
                     ),
                     child: const Text(
-                      "Give",
+                      "GIVE",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -137,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           vertical: 16, horizontal: 25),
                     ),
                     child: const Text(
-                      "Get",
+                      "GET",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -164,16 +164,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ],
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 64),
                   Container(
-                      width: 350,
+                      width: 300,
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                          color: const Color(0xFF2a573d),
+                          color: const Color(0xFF50784d),
                           borderRadius: BorderRadius.circular(4)
                       ),
                       child: const Text(
-                          'ALL FUNDS DIRECTED TO SMZO',
+                          'ALL FUNDS DIRECTED TO ALAMEDA COUNTY',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white,

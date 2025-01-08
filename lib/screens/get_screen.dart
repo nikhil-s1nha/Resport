@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'sign_up_screen.dart'; // Import the Sign Up Screen
 import 'want_screen.dart'; // Import the Want Screen for navigation
 
 class GetScreen extends StatefulWidget {
@@ -32,7 +34,8 @@ class _GetScreenState extends State<GetScreen> {
 
     try {
       print("Fetching uploads for sport: $sport...");
-      final DatabaseReference database = FirebaseDatabase.instance.ref("globalUploads");
+      final DatabaseReference database =
+      FirebaseDatabase.instance.ref("globalUploads");
       final snapshot = await database.get();
 
       if (snapshot.exists) {
@@ -152,6 +155,19 @@ class _GetScreenState extends State<GetScreen> {
                     final upload = uploads[index];
                     return GestureDetector(
                       onTap: () async {
+                        final user = FirebaseAuth.instance.currentUser;
+
+                        if (user == null) {
+                          // Redirect to sign-up screen if not signed in
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignUpScreen(fromRedirect: true), // Pass the flag
+                            ),
+                          );
+                          return;
+                        }
+
                         print("Navigating to WantScreen with key: ${upload['key']}");
                         // Navigate to WantScreen and wait for it to complete
                         await Navigator.push(
