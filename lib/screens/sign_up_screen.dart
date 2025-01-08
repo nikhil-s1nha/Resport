@@ -67,6 +67,7 @@ class SignUpScreenState extends State<SignUpScreen> {
           'email': email,
         });
 
+        print(FirebaseAuth.instance.currentUser?.uid);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Sign-up complete!"),

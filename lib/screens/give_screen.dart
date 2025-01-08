@@ -114,6 +114,7 @@ class GiveScreenState extends State<GiveScreen> {
         'transportMethod': transportMethod,
         'uploadedBy': user.uid,
         'uploadedAt': DateTime.now().toIso8601String(),
+        'available': true, // Set the listing as available by default
       };
 
       // Upload data

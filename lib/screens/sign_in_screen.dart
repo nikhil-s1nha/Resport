@@ -56,6 +56,7 @@ class SignInScreenState extends State<SignInScreen> {
 
         // Retrieve user data from the database
         final DataSnapshot snapshot = await FirebaseDatabase.instance.ref("users").child(uid).get();
+        print(FirebaseAuth.instance.currentUser?.uid);
 
         if (snapshot.exists) {
           final Map<String, dynamic> userData = Map<String, dynamic>.from(snapshot.value as Map);

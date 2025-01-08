@@ -6,12 +6,15 @@ import 'screens/home_screen.dart';
 import 'screens/get_screen.dart';
 import 'screens/give_screen.dart';
 import 'screens/sign_up_screen.dart';
+import 'package:firebase_database/firebase_database.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseDatabase.instance.setPersistenceEnabled(false);
   runApp(const MyApp());
 }
 

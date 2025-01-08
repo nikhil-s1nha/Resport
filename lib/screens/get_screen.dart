@@ -31,28 +31,34 @@ class _GetScreenState extends State<GetScreen> {
     });
 
     try {
+      print("Fetching uploads for sport: $sport...");
       final DatabaseReference database = FirebaseDatabase.instance.ref("globalUploads");
       final snapshot = await database.get();
 
       if (snapshot.exists) {
+        print("Uploads found in database.");
         final Map<String, dynamic> globalUploadsData =
         Map<String, dynamic>.from(snapshot.value as Map);
 
-        // Filter uploads by sport
+        // Filter uploads by sport and check if available
         for (var uploadEntry in globalUploadsData.entries) {
           final upload = uploadEntry.value as Map;
-          if (upload['sport'] == sport) {
+          if (upload['sport'] == sport && (upload['available'] ?? true)) {
             uploads.add({
               'title': upload['title'],
               'imageUrl': upload['imagePath'], // Firebase Storage URL
               'description': upload['description'],
               'transportMethod': upload['transportMethod'],
               'uploadedBy': upload['uploadedBy'],
+              'key': uploadEntry.key, // Keep track of the database key
             });
           }
         }
+      } else {
+        print("No uploads found in database.");
       }
     } catch (e) {
+      print("Error fetching uploads: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Error fetching uploads: $e"),
@@ -64,6 +70,15 @@ class _GetScreenState extends State<GetScreen> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  Widget buildImage(String imageUrl) {
+    return Image.network(
+      imageUrl,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) =>
+      const Icon(Icons.broken_image, size: 50),
+    );
   }
 
   @override
@@ -136,8 +151,10 @@ class _GetScreenState extends State<GetScreen> {
                   itemBuilder: (context, index) {
                     final upload = uploads[index];
                     return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        print("Navigating to WantScreen with key: ${upload['key']}");
+                        // Navigate to WantScreen and wait for it to complete
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => WantScreen(
@@ -146,23 +163,23 @@ class _GetScreenState extends State<GetScreen> {
                               imagePath: upload['imageUrl'],
                               description: upload['description'],
                               transportMethod: upload['transportMethod'],
+                              itemKey: upload['key'], // Pass the database key
                             ),
                           ),
                         );
+
+                        // Refresh the list after returning from WantScreen
+                        if (selectedSport != null) {
+                          print("Refreshing uploads for sport: $selectedSport...");
+                          fetchUploads(selectedSport!);
+                        }
                       },
                       child: Card(
                         elevation: 4.0,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Expanded(
-                              child: Image.network(
-                                upload['imageUrl'], // Firebase Storage URL
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.broken_image, size: 50),
-                              ),
-                            ),
+                            Expanded(child: buildImage(upload['imageUrl'])),
                             Container(
                               color: Colors.black.withOpacity(0.5),
                               padding: const EdgeInsets.all(8.0),
