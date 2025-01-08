@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:io'; // Required for File
 import 'package:firebase_database/firebase_database.dart';
+import 'want_screen.dart'; // Import the Want Screen for navigation
 
 class GetScreen extends StatefulWidget {
   const GetScreen({super.key});
@@ -39,11 +39,15 @@ class _GetScreenState extends State<GetScreen> {
         Map<String, dynamic>.from(snapshot.value as Map);
 
         // Filter uploads by sport
-        for (var upload in globalUploadsData.values) {
-          if (upload is Map && upload['sport'] == sport) {
+        for (var uploadEntry in globalUploadsData.entries) {
+          final upload = uploadEntry.value as Map;
+          if (upload['sport'] == sport) {
             uploads.add({
               'title': upload['title'],
-              'imageUrl': upload['imagePath'], // Assuming local file path
+              'imageUrl': upload['imagePath'], // Firebase Storage URL
+              'description': upload['description'],
+              'transportMethod': upload['transportMethod'],
+              'uploadedBy': upload['uploadedBy'],
             });
           }
         }
@@ -131,33 +135,49 @@ class _GetScreenState extends State<GetScreen> {
                   itemCount: uploads.length,
                   itemBuilder: (context, index) {
                     final upload = uploads[index];
-                    return Card(
-                      elevation: 4.0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(
-                            child: Image.file(
-                              File(upload['imageUrl']), // Local file path
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.broken_image, size: 50),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WantScreen(
+                              title: upload['title'],
+                              uploadedBy: upload['uploadedBy'],
+                              imagePath: upload['imageUrl'],
+                              description: upload['description'],
+                              transportMethod: upload['transportMethod'],
                             ),
                           ),
-                          Container(
-                            color: Colors.black.withOpacity(0.5),
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              upload['title'],
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                        );
+                      },
+                      child: Card(
+                        elevation: 4.0,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              child: Image.network(
+                                upload['imageUrl'], // Firebase Storage URL
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.broken_image, size: 50),
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        ],
+                            Container(
+                              color: Colors.black.withOpacity(0.5),
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                upload['title'],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
