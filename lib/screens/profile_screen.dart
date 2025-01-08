@@ -118,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 16),
             buildTextField('Email', emailController, enabled: false),
             const SizedBox(height: 16),
-            buildPasswordField('Password', passwordController),
+            buildPasswordField('Password (Empty if Google Sign-In)', passwordController),
             const SizedBox(height: 16),
             buildTextField('Phone Number', phoneController),
             const SizedBox(height: 16),
