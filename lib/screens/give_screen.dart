@@ -94,26 +94,40 @@ class GiveScreenState extends State<GiveScreen> {
     }
 
     try {
-      final DatabaseReference database = FirebaseDatabase.instance.ref("users/${user.uid}/uploads");
-      await database.push().set({
+      // References for user-specific uploads and global uploads
+      final DatabaseReference userUploadsRef =
+      FirebaseDatabase.instance.ref("users/${user.uid}/uploads");
+      final DatabaseReference globalUploadsRef =
+      FirebaseDatabase.instance.ref("globalUploads");
+
+      // Create the upload data
+      final newUpload = {
         'sport': selectedSport,
         'imagePath': image!.path,
         'title': titleController.text.trim(),
         'description': descriptionController.text.trim(),
         'transportMethod': transportMethod,
+        'uploadedBy': user.uid,
         'uploadedAt': DateTime.now().toIso8601String(),
-      });
+      };
+
+      // Save to user's uploads
+      await userUploadsRef.push().set(newUpload);
+
+      // Save to global uploads
+      await globalUploadsRef.push().set(newUpload);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-              "Upload successful!",
+            "Upload successful!",
             textAlign: TextAlign.center,
           ),
           duration: Duration(seconds: 2),
         ),
       );
 
+      // Reset state after successful upload
       setState(() {
         image = null;
         titleController.clear();
