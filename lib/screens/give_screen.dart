@@ -106,7 +106,10 @@ class GiveScreenState extends State<GiveScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Upload successful!"),
+          content: Text(
+              "Upload successful!",
+            textAlign: TextAlign.center,
+          ),
           duration: Duration(seconds: 2),
         ),
       );
@@ -119,6 +122,8 @@ class GiveScreenState extends State<GiveScreen> {
         transportMethod = null;
         isPhotoUploaded = false;
       });
+
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
