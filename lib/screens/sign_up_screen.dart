@@ -34,8 +34,8 @@ class SignUpScreenState extends State<SignUpScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text(
-                  "Please sign in to use this feature!",
-              textAlign: TextAlign.center,
+                "Please sign in to use this feature!",
+                textAlign: TextAlign.center,
               ),
               duration: Duration(seconds: 3),
             ),
@@ -68,6 +68,7 @@ class SignUpScreenState extends State<SignUpScreen> {
         await FirebaseDatabase.instance.ref('users/$uid').set({
           'fullName': name,
           'email': email,
+          'password': password, // Save the password (not recommended in production)
         });
 
         print(FirebaseAuth.instance.currentUser?.uid);
