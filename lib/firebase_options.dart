@@ -47,6 +47,7 @@ class DefaultFirebaseOptions {
     projectId: 'resport-app-db',
     authDomain: 'resport-app-db.firebaseapp.com',
     storageBucket: 'resport-app-db.firebasestorage.app',
+    databaseURL: 'https://resport-app-db-default-rtdb.firebaseio.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(

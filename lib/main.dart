@@ -14,7 +14,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseDatabase.instance.setPersistenceEnabled(false);
+  FirebaseDatabase database = FirebaseDatabase.instance;
   runApp(const MyApp());
 }
 
