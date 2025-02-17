@@ -21,13 +21,22 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for android - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
-        return windows;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -42,47 +51,22 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBjUyuDAPXu8bFoWcBSZCLgfTX1Y-VoHx0',
-    appId: '1:745804421317:web:3cdac06babdfd4815938ac',
+    appId: '1:745804421317:web:e51a3b05cfbef0c95938ac',
     messagingSenderId: '745804421317',
     projectId: 'resport-app-db',
     authDomain: 'resport-app-db.firebaseapp.com',
-    storageBucket: 'resport-app-db.firebasestorage.app',
     databaseURL: 'https://resport-app-db-default-rtdb.firebaseio.com',
-  );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDAwqi2HdmzPWqjQrGNq4tCXAZwjzLX71s',
-    appId: '1:745804421317:android:181c7a71200a14d45938ac',
-    messagingSenderId: '745804421317',
-    projectId: 'resport-app-db',
     storageBucket: 'resport-app-db.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyClTeuFByLRrhE9nfG6J_RPobypyv90a9Q',
-    appId: '1:745804421317:ios:7a255edc112d527d5938ac',
+    appId: '1:745804421317:ios:5c6106859bf4805e5938ac',
     messagingSenderId: '745804421317',
     projectId: 'resport-app-db',
+    databaseURL: 'https://resport-app-db-default-rtdb.firebaseio.com',
     storageBucket: 'resport-app-db.firebasestorage.app',
-    iosBundleId: 'com.nikhilsinha.resportcode',
+    iosClientId: '745804421317-5a2sr1nvou6gd1kpf9kf3uka90p6n4is.apps.googleusercontent.com',
+    iosBundleId: 'com.RESP0RT.Resport',
   );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyClTeuFByLRrhE9nfG6J_RPobypyv90a9Q',
-    appId: '1:745804421317:ios:f89c99e730355ed75938ac',
-    messagingSenderId: '745804421317',
-    projectId: 'resport-app-db',
-    storageBucket: 'resport-app-db.firebasestorage.app',
-    iosBundleId: 'com.example.resportcode',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBjUyuDAPXu8bFoWcBSZCLgfTX1Y-VoHx0',
-    appId: '1:745804421317:web:af0f8cf61399cf095938ac',
-    messagingSenderId: '745804421317',
-    projectId: 'resport-app-db',
-    authDomain: 'resport-app-db.firebaseapp.com',
-    storageBucket: 'resport-app-db.firebasestorage.app',
-  );
-
 }

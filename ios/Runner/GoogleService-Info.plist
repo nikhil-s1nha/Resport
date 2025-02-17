@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>745804421317-5a2sr1nvou6gd1kpf9kf3uka90p6n4is.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.745804421317-5a2sr1nvou6gd1kpf9kf3uka90p6n4is</string>
 	<key>API_KEY</key>
 	<string>AIzaSyClTeuFByLRrhE9nfG6J_RPobypyv90a9Q</string>
 	<key>GCM_SENDER_ID</key>
@@ -9,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.nikhilsinha.resportcode</string>
+	<string>com.RESP0RT.Resport</string>
 	<key>PROJECT_ID</key>
 	<string>resport-app-db</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:745804421317:ios:7a255edc112d527d5938ac</string>
+	<string>1:745804421317:ios:5c6106859bf4805e5938ac</string>
+	<key>DATABASE_URL</key>
+	<string>https://resport-app-db-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>
