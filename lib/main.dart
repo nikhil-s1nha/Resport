@@ -6,6 +6,7 @@ import 'screens/home_screen.dart';
 import 'screens/get_screen.dart';
 import 'screens/give_screen.dart';
 import 'screens/sign_up_screen.dart';
+import 'screens/items_screen.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         '/get': (context) => const GetScreen(),
         '/sign-up': (context) => const SignUpScreen(),
         '/profile': (context) => const ProfileScreen(),
+        '/items': (context) => const ItemsScreen(),
       },
     );
   }

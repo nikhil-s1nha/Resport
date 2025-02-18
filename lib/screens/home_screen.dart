@@ -86,6 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
             onSelected: (value) {
               if (value == "Profile") {
                 Navigator.pushNamed(context, '/profile'); // Navigate to profile screen
+              } else if (value == "My Items") {
+                Navigator.pushNamed(context, '/items'); // Navigate to My Items screen
               } else if (value == "Logout") {
                 logout();
               }
@@ -96,21 +98,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   "PROFILE",
                   style: GoogleFonts.montserrat(
-                      textStyle: TextStyle(
-                          fontWeight: FontWeight.w500
-                      )
-                  ),
+                      textStyle: const TextStyle(fontWeight: FontWeight.w500)),
                 ),
               ),
-               PopupMenuItem(
+              PopupMenuItem(
+                value: "My Items",
+                child: Text(
+                  "MY ITEMS",
+                  style: GoogleFonts.montserrat(
+                      textStyle: const TextStyle(fontWeight: FontWeight.w500)),
+                ),
+              ),
+              PopupMenuItem(
                 value: "Logout",
                 child: Text(
                   "LOGOUT",
                   style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      fontWeight: FontWeight.w500
-                    )
-                  ),
+                      textStyle: const TextStyle(fontWeight: FontWeight.w500)),
                 ),
               ),
             ],
