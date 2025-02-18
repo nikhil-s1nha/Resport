@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _launchURL() async {
-    final Uri url = Uri.parse("https://www.google.com");
+    final Uri url = Uri.parse("https://gofund.me/1e7a3bf2");
 
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       throw 'Could not launch $url';
