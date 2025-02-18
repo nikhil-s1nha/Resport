@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:google_fonts/google_fonts.dart'; // Added Google Fonts
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -24,9 +25,12 @@ class SignInScreenState extends State<SignInScreen> {
     // Validate email and password
     if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please enter your email"),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text(
+            "Please enter your email",
+            style: GoogleFonts.montserrat(),
+          ),
+          duration: const Duration(seconds: 2),
         ),
       );
       return;
@@ -34,9 +38,12 @@ class SignInScreenState extends State<SignInScreen> {
 
     if (password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please enter your password"),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text(
+            "Please enter your password",
+            style: GoogleFonts.montserrat(),
+          ),
+          duration: const Duration(seconds: 2),
         ),
       );
       return;
@@ -44,7 +51,8 @@ class SignInScreenState extends State<SignInScreen> {
 
     try {
       // Authenticate the user with Firebase
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -55,11 +63,13 @@ class SignInScreenState extends State<SignInScreen> {
         String uid = user.uid;
 
         // Retrieve user data from the database
-        final DataSnapshot snapshot = await FirebaseDatabase.instance.ref("users").child(uid).get();
+        final DataSnapshot snapshot =
+        await FirebaseDatabase.instance.ref("users").child(uid).get();
         print(FirebaseAuth.instance.currentUser?.uid);
 
         if (snapshot.exists) {
-          final Map<String, dynamic> userData = Map<String, dynamic>.from(snapshot.value as Map);
+          final Map<String, dynamic> userData =
+          Map<String, dynamic>.from(snapshot.value as Map);
 
           // Optional: You can display user's name, email, etc., on the home screen
           print("Sign-in successful! Welcome, ${userData['fullName']}");
@@ -73,7 +83,10 @@ class SignInScreenState extends State<SignInScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Error: ${e.toString()}"),
+          content: Text(
+            "Error: ${e.toString()}",
+            style: GoogleFonts.montserrat(),
+          ),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -87,12 +100,14 @@ class SignInScreenState extends State<SignInScreen> {
         leading: BackButton(
           color: Colors.white,
         ),
-        title: const Text(
+        title: Text(
           "SIGN IN",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 30,
-            fontWeight: FontWeight.w500
+          style: GoogleFonts.montserrat(
+            textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 28,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
         backgroundColor: const Color(0xFF1F402D), // Olive green color
@@ -101,16 +116,18 @@ class SignInScreenState extends State<SignInScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              "Sign In",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF1F402D),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
+            // Text(
+            //   "SIGN IN",
+            //   style: GoogleFonts.montserrat(
+            //     textStyle: const TextStyle(
+            //       fontSize: 24,
+            //       fontWeight: FontWeight.bold,
+            //       color: Color(0xFF1F402D),
+            //     ),
+            //   ),
+            //   textAlign: TextAlign.center,
+            // ),
+            // const SizedBox(height: 16),
 
             // Email Input
             SizedBox(
@@ -119,13 +136,14 @@ class SignInScreenState extends State<SignInScreen> {
                 controller: emailController,
                 decoration: InputDecoration(
                   labelText: "Email",
+                  labelStyle: GoogleFonts.montserrat(),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
             // Password Input
             SizedBox(
@@ -135,6 +153,7 @@ class SignInScreenState extends State<SignInScreen> {
                 obscureText: !showPassword,
                 decoration: InputDecoration(
                   labelText: "Password",
+                  labelStyle: GoogleFonts.montserrat(),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -151,7 +170,7 @@ class SignInScreenState extends State<SignInScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 40),
 
             // Sign In Button
             SizedBox(
@@ -165,12 +184,14 @@ class SignInScreenState extends State<SignInScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text(
-                  "Sign In",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                child: Text(
+                  "SIGN IN",
+                  style: GoogleFonts.montserrat(
+                    textStyle: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

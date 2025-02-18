@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:google_fonts/google_fonts.dart'; // Added Google Fonts
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -75,11 +76,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Profile updated successfully!',
-            textAlign: TextAlign.center,
+          SnackBar(
+            content: Text(
+              'Profile updated successfully!',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.montserrat(),
             ),
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
           ),
         );
 
@@ -88,7 +91,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error updating profile: $e'),
+            content: Text(
+              'Error updating profile: $e',
+              style: GoogleFonts.montserrat(),
+            ),
             duration: const Duration(seconds: 2),
           ),
         );
@@ -103,12 +109,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         leading: BackButton(
           color: Colors.white,
         ),
-        title: const Text(
+        title: Text(
           'PROFILE',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 30,
-            fontWeight: FontWeight.w500
+          style: GoogleFonts.montserrat(
+            textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 28,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
         backgroundColor: const Color(0xFF1F402D), // Olive green color
@@ -125,7 +133,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 16),
             buildTextField('Email', emailController, enabled: false),
             const SizedBox(height: 16),
-            buildPasswordField('Password (Empty if Google Sign-In)', passwordController),
+            buildPasswordField(
+                'Password (Empty if Google Sign-In)', passwordController),
             const SizedBox(height: 16),
             buildTextField('Phone Number', phoneController),
             const SizedBox(height: 16),
@@ -146,12 +155,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: const Text(
+              child: Text(
                 'Save',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                style: GoogleFonts.montserrat(
+                  textStyle: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -168,6 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       enabled: enabled,
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: GoogleFonts.montserrat(),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -181,6 +193,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       obscureText: !showPassword,
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: GoogleFonts.montserrat(),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
         ),

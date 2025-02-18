@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:google_fonts/google_fonts.dart'; // Added Google Fonts
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -54,20 +55,23 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-            "HOME",
-            style: TextStyle(
+        title: Text(
+          "HOME",
+          style: GoogleFonts.montserrat(
+            textStyle: const TextStyle(
               color: Colors.white,
-              fontSize: 30,
-              fontWeight: FontWeight.w500
-            )),
+              fontSize: 28,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
         backgroundColor: const Color(0xFF1F402D), // Olive green color
         actions: isAuthenticated
             ? [
           PopupMenuButton<String>(
             icon: const Icon(
-                Icons.account_circle_sharp,
-                color: Colors.white,
+              Icons.account_circle_sharp,
+              color: Colors.white,
               size: 34,
             ),
             onSelected: (value) {
@@ -78,13 +82,27 @@ class _HomeScreenState extends State<HomeScreen> {
               }
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: "Profile",
-                child: Text("Profile"),
+                child: Text(
+                  "PROFILE",
+                  style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                          fontWeight: FontWeight.w500
+                      )
+                  ),
+                ),
               ),
-              const PopupMenuItem(
+               PopupMenuItem(
                 value: "Logout",
-                child: Text("Logout"),
+                child: Text(
+                  "LOGOUT",
+                  style: GoogleFonts.montserrat(
+                    textStyle: TextStyle(
+                      fontWeight: FontWeight.w500
+                    )
+                  ),
+                ),
               ),
             ],
           ),
@@ -101,11 +119,13 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Text(
               isAuthenticated
                   ? "Welcome to Resport, ${name}!"
-                  : "Welcome to Resport!" ,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                  : "Welcome to Resport!",
+              style: GoogleFonts.montserrat(
+                textStyle: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
               ),
               textAlign: TextAlign.center,
             ),
@@ -122,13 +142,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF2a573d), // Olive green
                       padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 25),
+                          vertical: 20, horizontal: 36),
                     ),
-                    child: const Text(
+                    child: Text(
                       "GIVE",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
+                      style: GoogleFonts.montserrat(
+                        textStyle: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600
+                        ),
                       ),
                     ),
                   ),
@@ -140,13 +163,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF2a573d), // Olive green
                       padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 25),
+                          vertical: 20, horizontal: 40),
                     ),
-                    child: const Text(
+                    child: Text(
                       "GET",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
+                      style: GoogleFonts.montserrat(
+                        textStyle: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600
+                        ),
                       ),
                     ),
                   ),
@@ -159,34 +185,38 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2a573d), // Olive green
                         padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 25),
+                            vertical: 20, horizontal: 30),
                       ),
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
+                      child: Text(
+                        "SIGN UP",
+                        style: GoogleFonts.montserrat(
+                          textStyle: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600
+                          ),
                         ),
                       ),
                     ),
                   ],
                   const SizedBox(height: 64),
                   Container(
-                      width: 300,
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                          color: const Color(0xFF50784d),
-                          borderRadius: BorderRadius.circular(4)
+                    width: 300,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                        color: const Color(0xFF50784d),
+                        borderRadius: BorderRadius.circular(4)),
+                    child: Text(
+                      'ALL FUNDS DIRECTED TO ALAMEDA COUNTY',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.montserrat(
+                        textStyle: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
-                      child: const Text(
-                          'ALL FUNDS DIRECTED TO ALAMEDA COUNTY',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          )
-                      )
+                    ),
                   )
                 ],
               ),

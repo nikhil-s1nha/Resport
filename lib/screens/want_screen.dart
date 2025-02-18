@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:io'; // Required for local file paths
 import 'package:firebase_database/firebase_database.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 class WantScreen extends StatelessWidget {
   final String title;
@@ -66,13 +68,15 @@ class WantScreen extends StatelessWidget {
             leading: BackButton(
               color: Colors.white
             ),
-            title: const Text(
-              "WANT",
-              style: TextStyle(
+            title:  Text(
+              "CHECKOUT",
+              style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
                   color: Colors.white,
-                  fontSize: 30,
+                  fontSize: 28,
                   fontWeight: FontWeight.w500
-              ),
+              )
+              )
             ),
             backgroundColor: const Color(0xFF1F402D), // Olive green color
           ),
@@ -84,10 +88,12 @@ class WantScreen extends StatelessWidget {
                 // Title and uploader info
                 Text(
                   "$title uploaded by $displayUploadedBy",
-                  style: const TextStyle(
+                  style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                  ),
+                  )
+                  )
                 ),
                 const SizedBox(height: 16),
 
@@ -112,12 +118,14 @@ class WantScreen extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // Description
-                const Text(
-                  "Description:",
-                  style: TextStyle(
-                    fontSize: 16,
+                 Text(
+                  "DESCRIPTION:",
+                  style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
-                  ),
+                  )
+                  )
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -127,12 +135,14 @@ class WantScreen extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // Transport method
-                const Text(
-                  "Transport Method:",
-                  style: TextStyle(
-                    fontSize: 16,
+                 Text(
+                  "TRANSPORT METHOD:",
+                  style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
-                  ),
+                  )
+                 )
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -154,9 +164,15 @@ class WantScreen extends StatelessWidget {
                       Navigator.pushNamedAndRemoveUntil(
                           context, '/', (route) => false);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                         SnackBar(
                           content: Text(
                             "Success! More details about receiving the product will be emailed!",
+                            style: GoogleFonts.montserrat(
+                                textStyle: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500
+                                )
+                            ),
                             textAlign: TextAlign.center,
                           ),
                           duration: Duration(seconds: 3),
@@ -170,13 +186,15 @@ class WantScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
-                      "Request Item",
-                      style: TextStyle(
+                    child:  Text(
+                      "REQUEST ITEM",
+                      style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
-                      ),
+                      )
+                  )
                     ),
                   ),
                 ),

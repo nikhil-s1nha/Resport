@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:resportcode/screens/sign_in_screen.dart';
 import '../services/auth_service.dart'; // Update with the correct path
+import 'package:google_fonts/google_fonts.dart';
 
 class SignUpScreen extends StatefulWidget {
   final bool fromRedirect; // Flag to check if redirected from another screen
@@ -32,9 +33,15 @@ class SignUpScreenState extends State<SignUpScreen> {
       Future.delayed(Duration.zero, () {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+             SnackBar(
               content: Text(
                 "Please sign in to use this feature!",
+                style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w500
+                  )
+                ),
                 textAlign: TextAlign.center,
               ),
               duration: Duration(seconds: 3),
@@ -48,8 +55,17 @@ class SignUpScreenState extends State<SignUpScreen> {
   void checkFinish() async {
     if (passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please enter a password"),
+         SnackBar(
+          content: Text(
+            "Please enter a password!",
+            style: GoogleFonts.montserrat(
+                textStyle: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w500
+                )
+            ),
+          textAlign: TextAlign.center,
+          ),
           duration: Duration(seconds: 2),
         ),
       );
@@ -73,8 +89,17 @@ class SignUpScreenState extends State<SignUpScreen> {
 
         print(FirebaseAuth.instance.currentUser?.uid);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Sign-up complete!"),
+          SnackBar(
+            content: Text(
+              "Sign-up complete!",
+              style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w500
+            )
+          ),
+          textAlign: TextAlign.center
+        ),
             duration: Duration(seconds: 2),
           ),
         );
@@ -95,6 +120,13 @@ class SignUpScreenState extends State<SignUpScreen> {
             SnackBar(
               content: Text(
                 "The email address is already in use. Please sign in instead.",
+                style: GoogleFonts.montserrat(
+                    textStyle: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500
+                    )
+                ),
+                textAlign: TextAlign.center,
               ),
               duration: const Duration(seconds: 3),
             ),
@@ -106,7 +138,15 @@ class SignUpScreenState extends State<SignUpScreen> {
           // Handle other Firebase Auth errors
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Error: ${e.message}"),
+              content: Text("Error: ${e.message}",
+                  style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500
+                      )
+                  ),
+                textAlign: TextAlign.center,
+              ),
               duration: const Duration(seconds: 2),
             ),
           );
@@ -114,7 +154,15 @@ class SignUpScreenState extends State<SignUpScreen> {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Error: ${e.toString()}"),
+            content: Text("Error: ${e.toString()}",
+                style: GoogleFonts.montserrat(
+                    textStyle: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500
+                    )
+                ),
+              textAlign: TextAlign.center,
+            ),
             duration: const Duration(seconds: 2),
           ),
         );
@@ -127,8 +175,16 @@ class SignUpScreenState extends State<SignUpScreen> {
       await authService.signInWithGoogle();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Google sign-in successful!"),
+         SnackBar(
+          content: Text("Google sign-in successful!",
+              style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w500
+                  )
+              ),
+          textAlign: TextAlign.center,
+          ),
           duration: Duration(seconds: 2),
         ),
       );
@@ -138,7 +194,15 @@ class SignUpScreenState extends State<SignUpScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Error: ${e.toString()}"),
+          content: Text("Error: ${e.toString()}",
+              style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w500
+                  )
+              ),
+          textAlign: TextAlign.center,
+          ),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -152,13 +216,15 @@ class SignUpScreenState extends State<SignUpScreen> {
         leading: BackButton(
           color: Colors.white, // Make it white
         ),
-        title: const Text(
+        title:  Text(
           "SIGN UP",
-          style: TextStyle(
+          style: GoogleFonts.montserrat(
+          textStyle: TextStyle(
             color: Colors.white,
-            fontSize: 30,
+            fontSize: 28,
             fontWeight: FontWeight.w500,
-          ),
+          )
+      )
         ),
         backgroundColor: const Color(0xFF1F402D), // Olive green color
       ),
@@ -167,13 +233,15 @@ class SignUpScreenState extends State<SignUpScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                "Create an Account",
-                style: TextStyle(
-                  fontSize: 24,
+               Text(
+                "CREATE AN ACCOUNT",
+                style: GoogleFonts.montserrat(
+                textStyle: TextStyle(
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF1F402D),
-                ),
+                )
+              ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -186,6 +254,7 @@ class SignUpScreenState extends State<SignUpScreen> {
                     controller: nameController,
                     decoration: InputDecoration(
                       labelText: "Full Name",
+                      labelStyle: GoogleFonts.montserrat(),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -202,6 +271,11 @@ class SignUpScreenState extends State<SignUpScreen> {
                   controller: emailController,
                   decoration: InputDecoration(
                     labelText: "Email",
+                    labelStyle: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.w500
+                      )
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -219,6 +293,11 @@ class SignUpScreenState extends State<SignUpScreen> {
                     obscureText: !showPassword,
                     decoration: InputDecoration(
                       labelText: "Password",
+                      labelStyle: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.w500
+                      )
+                    ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -249,8 +328,16 @@ class SignUpScreenState extends State<SignUpScreen> {
                       // Check if the email is entered
                       if (emailController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Please enter an email"),
+                           SnackBar(
+                            content: Text("Please enter an email!",
+                              style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500
+                                  )
+                              ),
+                              textAlign: TextAlign.center
+                            ),
                             duration: Duration(seconds: 2),
                           ),
                         );
@@ -273,11 +360,13 @@ class SignUpScreenState extends State<SignUpScreen> {
                   ),
                   child: Text(
                     !isEmailEntered ? "Sign Up" : "Finish",
-                    style: const TextStyle(
+                    style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                    ),
+                    )
+                    )
                   ),
                 ),
               ),
@@ -291,10 +380,12 @@ class SignUpScreenState extends State<SignUpScreen> {
                         child: Divider(thickness: 1, indent: 32, endIndent: 8)),
                     Text(
                       "OR",
-                      style: TextStyle(
+                      style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
                         color: Colors.grey[600],
                         fontWeight: FontWeight.bold,
-                      ),
+                      )
+                      )
                     ),
                     const Expanded(
                         child: Divider(thickness: 1, indent: 8, endIndent: 32)),
@@ -320,13 +411,15 @@ class SignUpScreenState extends State<SignUpScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       "Sign In with Email",
-                      style: TextStyle(
+                      style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                      ),
+                      )
+                      )
                     ),
                   ),
                 ),
@@ -345,13 +438,15 @@ class SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                     icon: const Icon(Icons.g_mobiledata, color: Colors.white),
-                    label: const Text(
+                    label:  Text(
                       "Continue with Google",
-                      style: TextStyle(
+                      style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                      ),
+                      )
+                      )
                     ),
                   ),
                 ),

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'sign_up_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class GiveScreen extends StatefulWidget {
   const GiveScreen({super.key});
@@ -92,8 +93,17 @@ class GiveScreenState extends State<GiveScreen> {
         transportMethod == null ||
         selectedSport == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please complete all fields before uploading."),
+         SnackBar(
+          content: Text(
+              "Please complete all fields before uploading.",
+            style: GoogleFonts.montserrat(
+              textStyle: TextStyle(
+                color: Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.w500,
+              )
+            )
+          ),
           duration: Duration(seconds: 2),
         ),
       );
@@ -103,8 +113,17 @@ class GiveScreenState extends State<GiveScreen> {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("You must be signed in to upload."),
+         SnackBar(
+          content: Text(
+              "You must be signed in to upload.",
+              style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w500,
+                  )
+              )
+          ),
           duration: Duration(seconds: 2),
         ),
       );
@@ -137,8 +156,17 @@ class GiveScreenState extends State<GiveScreen> {
       await globalUploadsRef.push().set(newUpload);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Upload successful!"),
+         SnackBar(
+          content: Text(
+              "Upload successful!",
+              style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w500,
+                  )
+              )
+          ),
           duration: Duration(seconds: 2),
         ),
       );
@@ -171,13 +199,15 @@ class GiveScreenState extends State<GiveScreen> {
         leading: BackButton(
           color: Colors.white,
         ),
-        title: const Text(
+        title: Text(
           "GIVE",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 30,
-            fontWeight: FontWeight.w500
-          ),
+            style: GoogleFonts.montserrat(
+                textStyle: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.w500,
+                )
+            )
         ),
         backgroundColor: const Color(0xFF1F402D), // Olive green color
       ),
@@ -186,12 +216,14 @@ class GiveScreenState extends State<GiveScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              "Choose a sport to upload equipment of:",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+             Text(
+              "CHOOSE YOUR ITEM'S CATEGORY:",
+                style: GoogleFonts.montserrat(
+                    textStyle: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                    )
+                )
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
@@ -205,7 +237,14 @@ class GiveScreenState extends State<GiveScreen> {
                 ),
               ),
               value: selectedSport,
-              hint: const Text("Select a sport"),
+              hint: Text(
+                  "                     SELECT A SPORT",
+                  style: GoogleFonts.montserrat(
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.w500
+                      )
+                  )
+              ),
               onChanged: (String? newValue) {
                 setState(() {
                   selectedSport = newValue;
@@ -234,13 +273,15 @@ class GiveScreenState extends State<GiveScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text(
-                        "Upload Photo",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: Text(
+                        "UPLOAD PHOTO",
+                          style: GoogleFonts.montserrat(
+                              textStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              )
+                          )
                       ),
                     ),
                   ),
@@ -250,9 +291,14 @@ class GiveScreenState extends State<GiveScreen> {
               Column(
                 children: [
                   const SizedBox(height: 16),
-                  const Text(
-                    "Selected Image:",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                   Text(
+                    "SELECTED IMAGE:",
+                    style: GoogleFonts.montserrat(
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        )
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Image.file(
@@ -263,8 +309,9 @@ class GiveScreenState extends State<GiveScreen> {
                   const SizedBox(height: 16),
                   TextField(
                     controller: titleController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Title",
+                      labelStyle: GoogleFonts.montserrat(),
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -274,17 +321,22 @@ class GiveScreenState extends State<GiveScreen> {
                     maxLines: 3,
                     decoration: InputDecoration(
                       labelText: "Description (Model, Wear, Age)",
+                      labelStyle: GoogleFonts.montserrat(),
                       border: OutlineInputBorder(),
                       alignLabelWithHint: true,
                     ),
                   ),
                   const SizedBox(height: 16),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "Select a transport method:",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      Text(
+                        "SELECT TRANSPORT METHOD:",
+                        style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            )
+                        ),
                       ),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
@@ -294,7 +346,13 @@ class GiveScreenState extends State<GiveScreen> {
                           ),
                         ),
                         value: transportMethod,
-                        hint: const Text("Transport Method"),
+                        hint:  Text("                       Transport Method",
+                            style: GoogleFonts.montserrat(
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w500
+                                )
+                            )
+                        ),
                         onChanged: (String? newValue) {
                           setState(() {
                             transportMethod = newValue;
@@ -311,7 +369,7 @@ class GiveScreenState extends State<GiveScreen> {
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
-                    width: 80,
+                    width: 100,
                     child: ElevatedButton(
                       onPressed: uploadDataToDatabase,
                       style: ElevatedButton.styleFrom(
@@ -321,13 +379,15 @@ class GiveScreenState extends State<GiveScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text(
-                        "Upload",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: Text(
+                        "UPLOAD",
+                          style: GoogleFonts.montserrat(
+                              textStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              )
+                          )
                       ),
                     ),
                   ),

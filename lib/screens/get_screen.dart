@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'sign_up_screen.dart'; // Import the Sign Up Screen
 import 'want_screen.dart'; // Import the Want Screen for navigation
+import 'package:google_fonts/google_fonts.dart'; // Added Google Fonts
 
 class GetScreen extends StatefulWidget {
   const GetScreen({super.key});
@@ -91,12 +92,14 @@ class _GetScreenState extends State<GetScreen> {
         leading: BackButton(
           color: Colors.white,
         ),
-        title: const Text(
+        title: Text(
           "GET",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 30,
-            fontWeight: FontWeight.w500
+          style: GoogleFonts.montserrat(
+            textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 28,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
         backgroundColor: const Color(0xFF1F402D), // Olive green color
@@ -117,7 +120,10 @@ class _GetScreenState extends State<GetScreen> {
                 ),
               ),
               value: selectedSport,
-              hint: const Text("Select a sport"),
+              hint: Text(
+                "Select a sport",
+                style: GoogleFonts.montserrat(),
+              ),
               onChanged: (String? newValue) {
                 setState(() {
                   selectedSport = newValue;
@@ -129,7 +135,10 @@ class _GetScreenState extends State<GetScreen> {
               items: sportsList.map((sport) {
                 return DropdownMenuItem<String>(
                   value: sport,
-                  child: Text(sport),
+                  child: Text(
+                    sport,
+                    style: GoogleFonts.montserrat(),
+                  ),
                 );
               }).toList(),
             ),
@@ -140,10 +149,15 @@ class _GetScreenState extends State<GetScreen> {
                 child: CircularProgressIndicator(),
               )
             else if (uploads.isEmpty)
-              const Center(
+              Center(
                 child: Text(
                   "No uploads found for this sport.",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: GoogleFonts.montserrat(
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               )
             else
@@ -167,7 +181,8 @@ class _GetScreenState extends State<GetScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const SignUpScreen(fromRedirect: true), // Pass the flag
+                              builder: (context) =>
+                              const SignUpScreen(fromRedirect: true),
                             ),
                           );
                           return;
@@ -206,10 +221,12 @@ class _GetScreenState extends State<GetScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                 upload['title'],
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                                style: GoogleFonts.montserrat(
+                                  textStyle: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                                 textAlign: TextAlign.center,
                               ),
