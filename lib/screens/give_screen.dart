@@ -28,9 +28,9 @@ class GiveScreenState extends State<GiveScreen> {
   ];
 
   final List<String> transportMethods = [
-    "Home Pickup",
-    "Third-Party Transfer",
     "Self-Deliver",
+    "Home Pickup",
+    "Third-Party Service (UPS, USPS, etc)",
   ];
 
   File? image;
@@ -162,10 +162,11 @@ class GiveScreenState extends State<GiveScreen> {
               style: GoogleFonts.montserrat(
                   textStyle: TextStyle(
                     color: Colors.white,
-                    fontSize: 28,
+                    fontSize: 17,
                     fontWeight: FontWeight.w500,
                   )
-              )
+              ),
+            textAlign: TextAlign.center,
           ),
           duration: Duration(seconds: 2),
         ),
@@ -238,10 +239,11 @@ class GiveScreenState extends State<GiveScreen> {
               ),
               value: selectedSport,
               hint: Text(
-                  "                     SELECT A SPORT",
+                  "                    SELECT A SPORT",
                   style: GoogleFonts.montserrat(
                       textStyle: const TextStyle(
-                        fontWeight: FontWeight.w500
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87
                       )
                   )
               ),
@@ -253,7 +255,14 @@ class GiveScreenState extends State<GiveScreen> {
               items: sportsList.map((sport) {
                 return DropdownMenuItem<String>(
                   value: sport,
-                  child: Text(sport),
+                  child: Text(
+                    sport,
+                    style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.w500
+                      )
+                    )
+                  ),
                 );
               }).toList(),
             ),

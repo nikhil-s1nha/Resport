@@ -122,7 +122,7 @@ class WantScreen extends StatelessWidget {
                   "DESCRIPTION:",
                   style: GoogleFonts.montserrat(
                       textStyle: TextStyle(
-                    fontSize: 18,
+                    fontSize: 19.5,
                     fontWeight: FontWeight.bold,
                   )
                   )
@@ -130,7 +130,12 @@ class WantScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   description,
-                  style: const TextStyle(fontSize: 14),
+                  style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                          fontSize: 16,
+                        fontWeight: FontWeight.w500
+                      )
+                  ),
                 ),
                 const SizedBox(height: 16),
 
@@ -139,7 +144,7 @@ class WantScreen extends StatelessWidget {
                   "TRANSPORT METHOD:",
                   style: GoogleFonts.montserrat(
                   textStyle: TextStyle(
-                    fontSize: 18,
+                    fontSize: 19.5,
                     fontWeight: FontWeight.bold,
                   )
                  )
@@ -147,7 +152,12 @@ class WantScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   transportMethod,
-                  style: const TextStyle(fontSize: 14),
+                  style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500
+                      )
+                  ),
                 ),
                 const Spacer(),
 

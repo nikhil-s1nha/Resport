@@ -122,7 +122,12 @@ class _GetScreenState extends State<GetScreen> {
               value: selectedSport,
               hint: Text(
                 "Select a sport",
-                style: GoogleFonts.montserrat(),
+                style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w600
+                  )
+                ),
               ),
               onChanged: (String? newValue) {
                 setState(() {
@@ -137,7 +142,11 @@ class _GetScreenState extends State<GetScreen> {
                   value: sport,
                   child: Text(
                     sport,
-                    style: GoogleFonts.montserrat(),
+                    style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.w500
+                      )
+                    )
                   ),
                 );
               }).toList(),
