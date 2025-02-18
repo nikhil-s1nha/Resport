@@ -135,70 +135,86 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/give');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2a573d), // Olive green
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 36),
-                    ),
-                    child: Text(
-                      "GIVE",
-                      style: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600
+                  SizedBox(
+                    width: 145, // Adjust width to fit the longest text
+                    height: 65, // Keep height consistent
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/give');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF2a573d), // Olive green
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30), // Rounded edges
+                        ),
+                      ),
+                      child: Text(
+                        "GIVE",
+                        style: GoogleFonts.montserrat(
+                          textStyle: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/get');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2a573d), // Olive green
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 40),
-                    ),
-                    child: Text(
-                      "GET",
-                      style: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: 145,
+                    height: 65,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/get');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF2a573d), // Olive green
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: Text(
+                        "GET",
+                        style: GoogleFonts.montserrat(
+                          textStyle: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
                   ),
                   if (!isAuthenticated) ...[
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/sign-up');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF2a573d), // Olive green
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20, horizontal: 30),
-                      ),
-                      child: Text(
-                        "SIGN UP",
-                        style: GoogleFonts.montserrat(
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: 145,
+                      height: 65,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/sign-up');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF2a573d), // Olive green
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: Text(
+                          "SIGN UP",
+                          style: GoogleFonts.montserrat(
+                            textStyle: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22, // Slightly smaller as per your original request
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ],
+
                   const SizedBox(height: 64),
                   Container(
                     width: 300,
