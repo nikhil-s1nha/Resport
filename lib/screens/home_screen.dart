@@ -65,7 +65,11 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: isAuthenticated
             ? [
           PopupMenuButton<String>(
-            icon: const Icon(Icons.account_circle, color: Colors.white),
+            icon: const Icon(
+                Icons.account_circle_sharp,
+                color: Colors.white,
+              size: 34,
+            ),
             onSelected: (value) {
               if (value == "Profile") {
                 Navigator.pushNamed(context, '/profile'); // Navigate to profile screen
