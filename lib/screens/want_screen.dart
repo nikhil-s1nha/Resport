@@ -63,9 +63,16 @@ class WantScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
+            leading: BackButton(
+              color: Colors.white
+            ),
             title: const Text(
               "WANT",
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                  fontWeight: FontWeight.w500
+              ),
             ),
             backgroundColor: const Color(0xFF1F402D), // Olive green color
           ),

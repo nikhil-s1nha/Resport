@@ -58,6 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
             "HOME",
             style: TextStyle(
               color: Colors.white,
+              fontSize: 30,
+              fontWeight: FontWeight.w500
             )),
         backgroundColor: const Color(0xFF1F402D), // Olive green color
         actions: isAuthenticated

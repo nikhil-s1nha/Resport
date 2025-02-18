@@ -84,10 +84,15 @@ class SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          color: Colors.white,
+        ),
         title: const Text(
           "SIGN IN",
           style: TextStyle(
             color: Colors.white,
+            fontSize: 30,
+            fontWeight: FontWeight.w500
           ),
         ),
         backgroundColor: const Color(0xFF1F402D), // Olive green color
