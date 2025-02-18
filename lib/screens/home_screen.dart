@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:google_fonts/google_fonts.dart'; // Added Google Fonts
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -49,6 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
       isAuthenticated = false;
       name = null;
     });
+  }
+
+  void _launchURL() async {
+    final Uri url = Uri.parse("https://www.google.com");
+
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -216,20 +225,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
 
                   const SizedBox(height: 64),
-                  Container(
-                    width: 300,
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
+                  GestureDetector(
+                    onTap: _launchURL,
+                    child: Container(
+                      width: 275,
+                      padding: const EdgeInsets.all(25),
+                      decoration: BoxDecoration(
                         color: const Color(0xFF50784d),
-                        borderRadius: BorderRadius.circular(4)),
-                    child: Text(
-                      'ALL FUNDS DIRECTED TO ALAMEDA COUNTY',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'Donate to Resport!',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.montserrat(
+                          textStyle: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 21,
+                          ),
                         ),
                       ),
                     ),
