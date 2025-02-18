@@ -1,4 +1,4 @@
-# ResportCode Flutter App
+# Resport
 
 App aiming to create a community for re-using sports equipment.
 
